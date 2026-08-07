@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include <Wire.h>
 #include <Adafruit_BME280.h>
+#include "DallasTemperatureReader.h"
 
 namespace {
 constexpr uint8_t kSdaPin = 21;
@@ -21,21 +22,21 @@ void setup() {
 }
 
 void loop() {
+  DallasTemperatureReader::printReading();
+
   if (!bmeFound) {
     Serial.println("BME280 NOT FOUND");
-    delay(2000);
+    delay(15000);
     return;
   }
 
   const float temperatureF = bme.readTemperature() * 9.0f / 5.0f + 32.0f;
-  const float humidity = bme.readHumidity();
   const float pressureInHg = (bme.readPressure() / 100.0f) * kHpaToInHg;
 
-  Serial.print("BME280 FOUND  TEMP_F=");
+  Serial.print("The temp in shop is ");
   Serial.print(temperatureF, 1);
-  Serial.print("  HUMIDITY_PCT=");
-  Serial.print(humidity, 1);
-  Serial.print("  PRESSURE_INHG=");
-  Serial.println(pressureInHg, 2);
-  delay(2000);
+  Serial.print(" F and the pressure is ");
+  Serial.print(pressureInHg, 2);
+  Serial.println(" inHg.");
+  delay(15000);
 }
