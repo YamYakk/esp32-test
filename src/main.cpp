@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include <Wire.h>
 #include <Adafruit_BME280.h>
+#include "A02YYUWReader.h"
 #include "DallasTemperatureReader.h"
 
 namespace {
@@ -17,12 +18,15 @@ void setup() {
   delay(1000);
   Serial.println("BOOT OK");
 
+  A02YYUWReader::begin();
+
   Wire.begin(kSdaPin, kSclPin);
   bmeFound = bme.begin(0x76, &Wire) || bme.begin(0x77, &Wire);
 }
 
 void loop() {
   DallasTemperatureReader::printReading();
+  A02YYUWReader::printReading();
 
   if (!bmeFound) {
     Serial.println("BME280 NOT FOUND");
